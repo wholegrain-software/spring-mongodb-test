@@ -1,0 +1,6 @@
+{
+    _id: ObjectId('6032473edd63e50bd3565171'),
+    firstName: 'John',
+    lastName: 'Doe',
+    _class: 'person'
+}

@@ -1,0 +1,14 @@
+{
+    _id: ObjectId('60324824dbc0a320d7544ae1'),
+    people: [
+        {
+            $ref: 'person'
+            $id: ObjectId('6032473edd63e50bd3565171'),
+        },
+        {
+            $ref: 'person'
+            $id: ObjectId('6032473edd63e50bd3565172'),
+        },
+    ]
+    _class: 'department'
+}
