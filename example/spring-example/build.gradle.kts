@@ -5,16 +5,13 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-    }
 }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
-    testImplementation("com.wholegrain-software:spring-mongodb-test:0.0.1-SNAPSHOT")
+    testImplementation("com.wholegrain-software:spring-mongodb-test:1.0.0")
     testImplementation("org.testcontainers:mongodb:1.15.2")
     testImplementation("org.testcontainers:junit-jupiter:1.15.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

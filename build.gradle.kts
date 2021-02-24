@@ -22,6 +22,9 @@ allprojects {
 
     license {
         header = rootProject.file("LICENSE")
+
+        exclude("**/*.bson", "**/*.pdf")
+
     }
 }
 
