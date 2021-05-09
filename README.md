@@ -8,7 +8,7 @@ tests.
 ### Gradle
 
 ```groovy
-testImplementation 'com.wholegrain-software:spring-mongodb-test:1.0.0'
+testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.0'
 ```
 
 ### Maven
@@ -50,6 +50,8 @@ spring.data.mongodb.uri: mongodb://localhost:27017/my_mongo_database
 
 In this case everything will be executed against `my_mongo_database`.
 
+**Alternatively**: One can set the database manually inside the `@Doc` annotation through the `db` property.
+
 ## Tests with Documents
 
 The `@Doc` annotation allows inserting documents into the given database.
@@ -61,7 +63,7 @@ import com.wholegrainsoftware.springmongotest.Doc;
 import com.wholegrainsoftware.springmongotest.MongoDBTest;
 import org.junit.jupiter.api.Test;
 
-@Doc(collection = "person", files = {"/documents/john-doe.bson"})
+@Doc(collection = "person", files = {"/documents/john-doe.bson"}, /* optional: db = "my_mongo_database" */)
 public class MyTest extends MyIntegrationTest {
     @Test
     @MongoDBTest

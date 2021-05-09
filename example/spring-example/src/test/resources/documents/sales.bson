@@ -9,6 +9,13 @@
             $ref: 'person'
             $id: ObjectId('6032473edd63e50bd3565172'),
         },
+    ],
+    products: [
+        {
+            $ref: 'product',
+            $id: ObjectId('60952354ec7d311fac6169c1'),
+            $db: 'product_db'
+        }
     ]
     _class: 'department'
 }

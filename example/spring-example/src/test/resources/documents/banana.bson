@@ -1,0 +1,6 @@
+{
+    _id: ObjectId('60952354ec7d311fac6169c2'),
+    title: 'Banana',
+    description: 'Everybody loves these!',
+    _class: 'product'
+}

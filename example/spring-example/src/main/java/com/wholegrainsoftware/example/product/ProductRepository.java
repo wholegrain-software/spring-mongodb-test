@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example.mongodb;
+package com.wholegrainsoftware.example.product;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends MongoRepository<Person, ObjectId> {
+public interface ProductRepository extends MongoRepository<Product, ObjectId> {
+
 }

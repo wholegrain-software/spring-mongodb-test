@@ -22,7 +22,7 @@
 # SOFTWARE.
 #
 
-server.port: 8081
+server.port: 8082
 spring:
   data:
     mongodb:

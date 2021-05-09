@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
 }
 
-version = "1.0.0"
+version = "1.1.0"
 
 val springVersion by extra("5.3.4")
 val mongoClientVersion by extra("4.1.1")
@@ -61,7 +61,7 @@ publishing {
                 licenses {
                     license {
                         name.set("The MIT License (MIT)")
-                        url.set("http://opensource.org/licenses/MIT")
+                        url.set("https://opensource.org/licenses/MIT")
                     }
                 }
                 developers {

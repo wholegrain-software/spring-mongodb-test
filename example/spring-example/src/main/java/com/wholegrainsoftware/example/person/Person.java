@@ -22,38 +22,30 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example.department;
+package com.wholegrainsoftware.example.person;
 
-import com.wholegrainsoftware.example.person.Person;
-import com.wholegrainsoftware.example.product.Product;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-
-@Document("department")
-@TypeAlias("department")
-public class Department {
+@Document("person")
+@TypeAlias("person")
+public class Person {
     @Id
     private ObjectId id;
-    @DBRef
-    private List<Person> people = new ArrayList<>();
-    @DBRef(db = "product_db")
-    private List<Product> products = new ArrayList<>();
+    private String firstName;
+    private String lastName;
 
-    public Department() {
+    public Person() {
     }
 
-    public Department(ObjectId id, List<Person> people, List<Product> products) {
+    public Person(ObjectId id, String firstName, String lastName) {
         this.id = id;
-        this.people = people;
-        this.products = products;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public ObjectId getId() {
@@ -64,43 +56,43 @@ public class Department {
         this.id = id;
     }
 
-    public List<Person> getPeople() {
-        return people;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setPeople(List<Person> people) {
-        this.people = people;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Department that = (Department) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(people, that.people) &&
-                Objects.equals(products, that.products);
+        Person person = (Person) o;
+        return Objects.equals(id, person.id) &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, people, products);
+        return Objects.hash(id, firstName, lastName);
     }
 
     @Override
     public String toString() {
-        return "Department{" +
+        return "Person{" +
                 "id=" + id +
-                ", people=" + people +
-                ", products=" + products +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
     }
 }

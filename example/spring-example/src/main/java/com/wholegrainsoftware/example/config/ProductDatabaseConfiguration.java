@@ -22,16 +22,25 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example;
+package com.wholegrainsoftware.example.config;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.mongodb.client.MongoClient;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
-public class MongoDbApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(MongoDbApplication.class, args);
+@Configuration
+@EnableMongoRepositories(
+        basePackages = {"com.wholegrainsoftware.example.product"},
+        mongoTemplateRef = "productDbTemplate"
+)
+public class ProductDatabaseConfiguration {
+    @Bean
+    @Qualifier("productDbTemplate")
+    public MongoTemplate productDbTemplate(MongoClient client) {
+        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(client, "product_db"));
     }
 }

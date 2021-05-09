@@ -34,6 +34,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.util.TestContextResourceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.asS
 import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.getDatabaseName;
 
 class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
+    private final List<String> databaseNames = new ArrayList<>();
 
     @Override
     public void runScript(TestContext context, Doc annotation) {
@@ -54,17 +56,23 @@ class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
                 .map((res) -> Document.parse(read(res)))
                 .collect(Collectors.toList());
 
-        inDbSession(context, (db) -> db.getCollection(annotation.collection()).insertMany(documents));
+        inDbSession(context, annotation.db(), (db) -> db.getCollection(annotation.collection()).insertMany(documents));
     }
 
     @Override
     public void cleanup(TestContext context) {
-        inDbSession(context, (db) -> db.listCollectionNames().forEach((name) -> db.getCollection(name).deleteMany(all())));
+        List<String> dbNames = new ArrayList<>(databaseNames);
+        databaseNames.clear();
+        for (String dbName : dbNames) {
+            inDbSession(context, dbName, (db) -> db.listCollectionNames().forEach((name) -> db.getCollection(name).deleteMany(all())));
+        }
     }
 
-    private void inDbSession(TestContext context, Consumer<MongoDatabase> script) {
+    private void inDbSession(TestContext context, String databaseName, Consumer<MongoDatabase> script) {
+        String dbName = databaseName.isEmpty() ? getDatabaseName(context) : databaseName;
+        databaseNames.add(dbName);
         MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
-        MongoDatabase database = client.getDatabase(getDatabaseName(context));
+        MongoDatabase database = client.getDatabase(dbName);
         ClientSession session = client.startSession();
         script.accept(database);
         session.close();

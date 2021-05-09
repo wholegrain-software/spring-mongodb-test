@@ -46,6 +46,11 @@ import java.lang.annotation.*;
 public @interface Doc {
 
     /**
+     * This specifies the database into which the documents should be inserted.
+     */
+    String db() default "";
+
+    /**
      * This specifies the collection into which the documents should be inserted.
      */
     String collection();

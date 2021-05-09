@@ -44,6 +44,6 @@ public class MongoDbTest {
         MongoDBContainer db = new MongoDBContainer("mongo");
         db.start();
 
-        System.setProperty("SPRING_DATASOURCE_URI", db.getReplicaSetUrl("some_db"));
+        System.setProperty("SPRING_DATASOURCE_URI", db.getReplicaSetUrl("default_db"));
     }
 }

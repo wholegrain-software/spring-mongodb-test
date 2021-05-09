@@ -22,16 +22,17 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example;
+package com.wholegrainsoftware.example.util;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import com.wholegrainsoftware.springmongotest.Doc;
 
-@SpringBootApplication
-public class MongoDbApplication {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static void main(String[] args) {
-        SpringApplication.run(MongoDbApplication.class, args);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Doc(collection = "product", files = {"/documents/banana.bson", "/documents/apple.bson"}, db = "product_db")
+public @interface InsertProducts {
 }

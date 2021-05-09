@@ -22,16 +22,12 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example;
+package com.wholegrainsoftware.example.person;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-@SpringBootApplication
-public class MongoDbApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(MongoDbApplication.class, args);
-    }
+@Repository
+public interface PersonRepository extends MongoRepository<Person, ObjectId> {
 }

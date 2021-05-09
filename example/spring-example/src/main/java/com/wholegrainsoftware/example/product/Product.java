@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example.mongodb;
+package com.wholegrainsoftware.example.product;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -31,21 +31,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Document("person")
-@TypeAlias("person")
-public class Person {
+@Document("product")
+@TypeAlias("product")
+public class Product {
     @Id
     private ObjectId id;
-    private String firstName;
-    private String lastName;
+    private String title;
+    private String description;
 
-    public Person() {
+    public Product() {
     }
 
-    public Person(ObjectId id, String firstName, String lastName) {
+    public Product(ObjectId id, String title, String description) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.title = title;
+        this.description = description;
     }
 
     public ObjectId getId() {
@@ -56,34 +56,43 @@ public class Person {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id) &&
-                Objects.equals(firstName, person.firstName) &&
-                Objects.equals(lastName, person.lastName);
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(title, product.title) &&
+                Objects.equals(description, product.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName);
+        return Objects.hash(id, title, description);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
