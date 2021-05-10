@@ -8,7 +8,7 @@ tests.
 ### Gradle
 
 ```groovy
-testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.1'
+testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.3'
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.1'
 <dependency>
     <groupId>com.wholegrain-software</groupId>
     <artifactId>spring-mongodb-test</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.3</version>
     <scope>test</scope>
 </dependency>
 ```

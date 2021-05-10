@@ -34,16 +34,17 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.util.TestContextResourceUtils;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.asString;
 import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.getDatabaseName;
 
 class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
-    private final List<String> databaseNames = new ArrayList<>();
+    private static final List<String> EXCLUDED_DB_NAMES = Arrays.asList("config", "admin", "local");
 
     @Override
     public void runScript(TestContext context, Doc annotation) {
@@ -56,17 +57,22 @@ class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
                 .map((res) -> Document.parse(read(res)))
                 .collect(Collectors.toList());
 
-        databaseNames.add(annotation.db());
         inDbSession(context, annotation.db(), (db) -> db.getCollection(annotation.collection()).insertMany(documents));
     }
 
     @Override
     public void cleanup(TestContext context) {
-        List<String> dbNames = new ArrayList<>(databaseNames);
-        databaseNames.clear();
-        for (String dbName : dbNames) {
+        for (String dbName : determineDatabaseNames(context)) {
             inDbSession(context, dbName, (db) -> db.listCollectionNames().forEach((name) -> db.getCollection(name).deleteMany(all())));
         }
+    }
+
+    private List<String> determineDatabaseNames(TestContext context) {
+        MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
+        return StreamSupport
+                .stream(client.listDatabaseNames().spliterator(), false)
+                .filter(dbName -> !EXCLUDED_DB_NAMES.contains(dbName))
+                .collect(Collectors.toList());
     }
 
     private void inDbSession(TestContext context, String databaseName, Consumer<MongoDatabase> script) {

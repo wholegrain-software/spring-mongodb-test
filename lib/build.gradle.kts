@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
 }
 
-version = "1.1.1"
+version = "1.1.3"
 
 val springVersion by extra("5.3.4")
 val mongoClientVersion by extra("4.1.1")
@@ -49,6 +49,10 @@ tasks.withType<Jar> {
 
 publishing {
     publications {
+        create<MavenPublication>("gitlab") {
+            from(components["java"])
+        }
+
         create<MavenPublication>("library") {
             groupId = rootProject.group.toString()
             artifactId = rootProject.name
