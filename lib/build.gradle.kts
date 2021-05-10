@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
 }
 
-version = "1.1.0"
+version = "1.1.1"
 
 val springVersion by extra("5.3.4")
 val mongoClientVersion by extra("4.1.1")

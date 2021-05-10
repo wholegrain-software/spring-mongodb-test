@@ -56,6 +56,7 @@ class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
                 .map((res) -> Document.parse(read(res)))
                 .collect(Collectors.toList());
 
+        databaseNames.add(annotation.db());
         inDbSession(context, annotation.db(), (db) -> db.getCollection(annotation.collection()).insertMany(documents));
     }
 
@@ -70,7 +71,6 @@ class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
 
     private void inDbSession(TestContext context, String databaseName, Consumer<MongoDatabase> script) {
         String dbName = databaseName.isEmpty() ? getDatabaseName(context) : databaseName;
-        databaseNames.add(dbName);
         MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
         MongoDatabase database = client.getDatabase(dbName);
         ClientSession session = client.startSession();

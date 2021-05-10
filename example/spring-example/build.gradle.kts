@@ -11,7 +11,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
-    testImplementation("com.wholegrain-software:spring-mongodb-test:1.1.0")
+    testImplementation("com.wholegrain-software:spring-mongodb-test:1.1.1")
     testImplementation("org.testcontainers:mongodb:1.15.2")
     testImplementation("org.testcontainers:junit-jupiter:1.15.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
