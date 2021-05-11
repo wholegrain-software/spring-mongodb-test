@@ -92,12 +92,12 @@ public class MongoDBTestExecutionListener extends AbstractTestExecutionListener 
     @Override
     public void beforeTestMethod(TestContext context) {
         if (hasMongoDbTestAnnotation(context)) {
-            mongoDB.cleanup(context);
-            gridFs.cleanup(context);
-        }
+            executeCleanup(context, mongoDB);
+            executeCleanup(context, gridFs);
 
-        executePreparation(context, mongoDB, Doc.class);
-        executePreparation(context, gridFs, GridFsFile.class);
+            executePreparation(context, mongoDB, Doc.class);
+            executePreparation(context, gridFs, GridFsFile.class);
+        }
     }
 
     private <T extends Annotation> void executePreparation(TestContext context, AnnotationHandler<T> preparator, Class<T> clazz) {
@@ -106,6 +106,11 @@ public class MongoDBTestExecutionListener extends AbstractTestExecutionListener 
 
         ca.forEach(a -> preparator.runScript(context, a));
         ma.forEach(a -> preparator.runScript(context, a));
+    }
+
+    private <T extends Annotation> void executeCleanup(TestContext context, AnnotationHandler<T> preparator) {
+        preparator.cleanup(context);
+        preparator.cleanup(context);
     }
 
     private boolean hasMongoDbTestAnnotation(TestContext context) {

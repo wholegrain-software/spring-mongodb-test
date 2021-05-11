@@ -38,10 +38,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.asString;
-import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.getDatabaseName;
+import static com.wholegrainsoftware.springmongotest.AnnotationHandlerHelper.*;
 
 class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
     private static final List<String> EXCLUDED_DB_NAMES = Arrays.asList("config", "admin", "local");
@@ -65,14 +63,6 @@ class MongoDBAnnotationHandler implements AnnotationHandler<Doc> {
         for (String dbName : determineDatabaseNames(context)) {
             inDbSession(context, dbName, (db) -> db.listCollectionNames().forEach((name) -> db.getCollection(name).deleteMany(all())));
         }
-    }
-
-    private List<String> determineDatabaseNames(TestContext context) {
-        MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
-        return StreamSupport
-                .stream(client.listDatabaseNames().spliterator(), false)
-                .filter(dbName -> !EXCLUDED_DB_NAMES.contains(dbName))
-                .collect(Collectors.toList());
     }
 
     private void inDbSession(TestContext context, String databaseName, Consumer<MongoDatabase> script) {

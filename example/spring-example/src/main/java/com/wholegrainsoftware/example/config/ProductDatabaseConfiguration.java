@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
@@ -42,5 +44,11 @@ public class ProductDatabaseConfiguration {
     @Qualifier("productDbTemplate")
     public MongoTemplate productDbTemplate(MongoClient client) {
         return new MongoTemplate(new SimpleMongoClientDatabaseFactory(client, "product_db"));
+    }
+
+    @Bean
+    @Qualifier("productDbGridFsTemplate")
+    public GridFsTemplate productGridFsTemplate(MongoClient client, MappingMongoConverter converter) {
+        return new GridFsTemplate(new SimpleMongoClientDatabaseFactory(client, "product_db"), converter);
     }
 }

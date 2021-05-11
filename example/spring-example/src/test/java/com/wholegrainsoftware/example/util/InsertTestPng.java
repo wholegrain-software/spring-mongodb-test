@@ -22,31 +22,27 @@
  * SOFTWARE.
  */
 
-package com.wholegrainsoftware.example.config;
+package com.wholegrainsoftware.example.util;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import com.wholegrainsoftware.springmongotest.GridFsFile;
 
-@Configuration
-@EnableMongoRepositories(
-        basePackages = {"com.wholegrainsoftware.example.person", "com.wholegrainsoftware.example.department"}
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static com.wholegrainsoftware.example.util.InsertTestPng.FILE_ID;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@GridFsFile(
+        id = FILE_ID,
+        filePath = "/files/test.png",
+        metadata = "{ 'createdBy': ObjectId('60327cc5dbc0a320d7544ae3') }",
+        db = "product_db"
 )
-public class DefaultDatabaseConfiguration {
-    @Bean
-    @Primary
-    public MongoTemplate mongoTemplate(MongoDatabaseFactory factory) {
-        return new MongoTemplate(factory);
-    }
-
-    @Bean
-    @Primary
-    public GridFsTemplate gridFsTemplate(MongoDatabaseFactory factory, MappingMongoConverter converter) {
-        return new GridFsTemplate(factory, converter);
-    }
+public @interface InsertTestPng {
+    String FILE_ID = "60327c7f9189342c201e0e12";
 }
+
+

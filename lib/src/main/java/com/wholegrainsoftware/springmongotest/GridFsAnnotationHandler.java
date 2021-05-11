@@ -54,19 +54,22 @@ class GridFsAnnotationHandler implements AnnotationHandler<GridFsFile> {
         List<Resource> resources = TestContextResourceUtils.convertToResourceList(applicationContext, fileNames);
         Resource file = resources.get(0);
 
-        inGridFsSession(context, (bucket) -> {
+        inGridFsSession(context, annotation.db(), (bucket) -> {
             bucket.uploadFromStream(id(annotation), getName(file), getStream(file), options(annotation));
         });
     }
 
     @Override
     public void cleanup(TestContext context) {
-        inGridFsSession(context, GridFSBucket::drop);
+        for (String dbName : determineDatabaseNames(context)) {
+            inGridFsSession(context, dbName, GridFSBucket::drop);
+        }
     }
 
-    private void inGridFsSession(TestContext context, Consumer<GridFSBucket> script) {
+    private void inGridFsSession(TestContext context, String databaseName, Consumer<GridFSBucket> script) {
+        String dbName = databaseName.isEmpty() ? getDatabaseName(context) : databaseName;
         MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
-        GridFSBucket bucket = GridFSBuckets.create(client.getDatabase(getDatabaseName(context)));
+        GridFSBucket bucket = GridFSBuckets.create(client.getDatabase(dbName));
         script.accept(bucket);
     }
 

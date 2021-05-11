@@ -44,6 +44,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface GridFsFile {
+    /**
+     * This specifies the database into which the documents should be inserted.
+     */
+    String db() default "";
 
     /**
      * The custom id value of the file in GridFs.

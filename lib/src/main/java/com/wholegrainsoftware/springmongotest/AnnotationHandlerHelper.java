@@ -25,6 +25,7 @@
 package com.wholegrainsoftware.springmongotest;
 
 import com.mongodb.ConnectionString;
+import com.mongodb.client.MongoClient;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestContext;
@@ -34,6 +35,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.wholegrainsoftware.springmongotest.MongoDBTestException.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -41,6 +46,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 class AnnotationHandlerHelper {
     static final String MONGODB_URI = "spring.data.mongodb.uri";
     static final String MONGODB_DATABASE = "spring.data.mongodb.database";
+    private static final List<String> EXCLUDED_DB_NAMES = Arrays.asList("config", "admin", "local");
 
     public static String getDatabaseName(TestContext context) {
         Environment env = context.getApplicationContext().getEnvironment();
@@ -71,5 +77,13 @@ class AnnotationHandlerHelper {
         String name = resource.getFilename();
         if (name == null) throw fileNameShouldNotBeNull();
         return name;
+    }
+
+    public static List<String> determineDatabaseNames(TestContext context) {
+        MongoClient client = context.getApplicationContext().getBean(MongoClient.class);
+        return StreamSupport
+                .stream(client.listDatabaseNames().spliterator(), false)
+                .filter(dbName -> !EXCLUDED_DB_NAMES.contains(dbName))
+                .collect(Collectors.toList());
     }
 }

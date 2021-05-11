@@ -8,7 +8,7 @@ tests.
 ### Gradle
 
 ```groovy
-testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.3'
+testImplementation 'com.wholegrain-software:spring-mongodb-test:1.2.0'
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ testImplementation 'com.wholegrain-software:spring-mongodb-test:1.1.3'
 <dependency>
     <groupId>com.wholegrain-software</groupId>
     <artifactId>spring-mongodb-test</artifactId>
-    <version>1.1.3</version>
+    <version>1.2.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -124,7 +124,7 @@ import com.wholegrainsoftware.springmongotest.GridFsFile;
 import com.wholegrainsoftware.springmongotest.MongoDBTest;
 import org.junit.jupiter.api.Test;
 
-@GridFsFile(id = "60327c7f9189342c201e0e11", filePath = "/files/test.pdf")
+@GridFsFile(id = "60327c7f9189342c201e0e11", filePath = "/files/test.pdf", /* optional: db = "my_mongo_database" */)
 public class MyGridFsTest extends MyIntegrationTest {
     @Test
     @MongoDBTest

@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
 }
 
-version = "1.1.3"
+version = "1.2.0"
 
 val springVersion by extra("5.3.4")
 val mongoClientVersion by extra("4.1.1")
@@ -90,6 +90,16 @@ publishing {
         maven {
             name = "local"
             url = uri("$buildDir/repos/release")
+        }
+
+        maven {
+            name = "gitlab"
+            url = uri("https://gitlab.com/api/v4/projects/25683146/packages/maven")
+            credentials(HttpHeaderCredentials::class) {
+                name = properties["gitlabRepositoryUser"].toString()
+                value = properties["gitlabRepositoryPassword"].toString()
+            }
+            authentication { create<HttpHeaderAuthentication>("header") }
         }
 
         maven {

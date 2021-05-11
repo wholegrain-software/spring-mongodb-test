@@ -27,9 +27,12 @@ package com.wholegrainsoftware.example.gridfs;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.wholegrainsoftware.example.MongoDbTest;
 import com.wholegrainsoftware.example.util.InsertTestPdf;
+import com.wholegrainsoftware.example.util.InsertTestPng;
+import com.wholegrainsoftware.springmongotest.MongoDBTest;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
@@ -38,13 +41,19 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 public class GridFsScriptsTest extends MongoDbTest {
     private static final ObjectId FILE_OID = new ObjectId(InsertTestPdf.FILE_ID);
+    private static final ObjectId PRODUCT_FILE_OID = new ObjectId(InsertTestPng.FILE_ID);
     private static final String CREATED_BY_ID = "60327cc5dbc0a320d7544ae3";
     private static final ObjectId CREATED_BY_OID = new ObjectId(CREATED_BY_ID);
 
     @Autowired
     private GridFsTemplate gridFs;
 
+    @Autowired
+    @Qualifier("productDbGridFsTemplate")
+    private GridFsTemplate productDbGridFs;
+
     @Test
+    @MongoDBTest
     @InsertTestPdf
     public void fileIsPersistedToDatabase() {
         GridFSFile file = gridFs.findOne(new Query().addCriteria(
@@ -57,5 +66,21 @@ public class GridFsScriptsTest extends MongoDbTest {
         assertThat(file.getMetadata().get("createdBy")).isEqualTo(CREATED_BY_OID);
         assertThat(file.getFilename()).isEqualTo("test.pdf");
         assertThat(file.getLength()).isEqualTo(78279L);
+    }
+
+    @Test
+    @MongoDBTest
+    @InsertTestPng
+    public void fileIsPersistedToProductDatabase() {
+        GridFSFile file = productDbGridFs.findOne(new Query().addCriteria(
+                where("_id").is(PRODUCT_FILE_OID)
+                        .and("metadata.createdBy").is(CREATED_BY_OID)
+        ));
+
+        assertThat(file).isNotNull();
+        assertThat(file.getMetadata()).isNotNull();
+        assertThat(file.getMetadata().get("createdBy")).isEqualTo(CREATED_BY_OID);
+        assertThat(file.getFilename()).isEqualTo("test.png");
+        assertThat(file.getLength()).isEqualTo(3850L);
     }
 }
